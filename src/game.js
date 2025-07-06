@@ -20,11 +20,11 @@ export const iniciarJuego = () => {
         if (primerPar.size < 15) {
         do { par = Math.floor(Math.random() * 15 + 1); } while (primerPar.has(par));
             primerPar.add(par);
-            color = colores[par - 1];
+            // color = colores[par - 1]; // no es necesario de momento
         } else {
             do { par = Math.floor(Math.random() * 15 + 1); } while (segundoPar.has(par));
             segundoPar.add(par);
-            color = colores[par - 1];
+            // color = colores[par - 1]; // no es necesario de momento
         }
         carta.classList.add(`par${par}`);
         colorearCarta(carta, colorPorDefecto);
@@ -34,6 +34,10 @@ export const iniciarJuego = () => {
     let segundaCarta = '';
     let inicioJuego = Date.now();
 
+    const lista = document.createElement('ul'); // Se crea una lista donde se añadirán las cartas encontradas
+    lista.textContent = 'Parejas encontradas:';
+    document.getElementsByClassName('container')[0].after(lista);
+
     arrayCartas.forEach(carta => {
         carta.addEventListener('click', () => {
             if (carta.classList.contains('turnedCard')) return;
@@ -42,32 +46,47 @@ export const iniciarJuego = () => {
             const parIndex = parseInt(clasePar.replace('par', '')) - 1;
             const color = colores[parIndex];
 
-            colorearCarta(carta, color);
-            carta.classList.add('turnedCard');
+            colorearCarta(carta, color); // Colorea la carta
+            carta.textContent = `${parIndex + 1}`; // Identifica la carta con su número en el DOM
+            carta.classList.add('turnedCard');  // Añade la clase turnedCard
 
+            // Se evalua si ña carta está vacía o no para agregar la clase
             if (!primeraCarta) {
                 primeraCarta = clasePar;
             } else {
                 segundaCarta = clasePar;
 
+                // Si los dos pares de cartas son iguales se entra en este condicional
                 if (primeraCarta === segundaCarta) {
-                    parejasFormadas.add(primeraCarta);
+                    const mensaje = document.createElement('li');
+                    mensaje.classList.add('mensaje');
+                    mensaje.textContent = `Has encontrado el par de cartas ${primeraCarta.replace('par', '')}`;
+                    lista.appendChild(mensaje); // Se agrega el nuevo par de cartas encontrado a la lista
+
+                    parejasFormadas.add(primeraCarta); // Se añade el par de cartas encontrado
+
+                    // Si se han encontrado las 15 parejas se entra en este condicional
                     if (parejasFormadas.size === 15) {
                     const finJuego = Date.now();
                     const segundos = Math.floor((finJuego - inicioJuego) / 1000);
                     alert(`¡Ganaste! Tiempo: ${segundos} segundos`);
                     }
+
                     primeraCarta = '';
                     segundaCarta = '';
+
+                    // Si las dos cartas son diferentes se entra en esta condición 
                 } else {
+                    // Se 
                     setTimeout(() => {
                         arrayCartas.forEach(c => {
                             if (
                                 (c.classList.contains(primeraCarta) || c.classList.contains(segundaCarta)) &&
                                 !parejasFormadas.has(c.classList[1])
                             ) {
-                            colorearCarta(c, colorPorDefecto);
-                            c.classList.remove('turnedCard');
+                                colorearCarta(c, colorPorDefecto);
+                                c.textContent = '';
+                                c.classList.remove('turnedCard');
                             }
                     });
                     primeraCarta = '';
