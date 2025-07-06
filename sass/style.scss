@@ -8,9 +8,13 @@
 
 .container {
     display: grid;
-    grid-template-columns: .7fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
     gap: 10px;
+    border: 5px solid purple;
+    border-radius: 10px;
+    padding: 16px;   
+    margin-bottom: 32px; 
 }
 
 .primeraCelda {
@@ -44,18 +48,29 @@ h1 {
 }
 
 .instrucciones {
+    border: 5px solid rgb(0, 128, 41);
+    margin-bottom: 2rem;
+    padding: 16px;
+    border-radius: 10px;
+}
+
+.instrucciones > p {
     font-family: "Coming Soon";
     font-size: 1.3rem;
-    line-height: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 10px;
 }
 
 ul {
     font-family: "Coming Soon";
-    font-size: 24px;
+    font-size: 18px;
     margin-top: 24px;
 }
 .mensaje {
     margin: 16px;
     font-size: 16px;
+}
+
+.contador {
+    font-family: "Coming Soon";
+    font-size: 1.5rem;
 }

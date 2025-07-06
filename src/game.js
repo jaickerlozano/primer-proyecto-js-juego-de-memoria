@@ -12,6 +12,7 @@ export const iniciarJuego = () => {
     let segundoPar = new Set();
     let parejasFormadas = new Set();
     const colores = generarColoresUnicos(15);
+    let contador = 0;
 
     // Asignar clases y colores por par
     cartas.forEach(carta => {
@@ -37,6 +38,10 @@ export const iniciarJuego = () => {
     const lista = document.createElement('ul'); // Se crea una lista donde se añadirán las cartas encontradas
     lista.textContent = 'Parejas encontradas:';
     document.getElementsByClassName('container')[0].after(lista);
+
+    const mensajeContador = document.createElement('p');
+    mensajeContador.classList.add('contador');
+    lista.before(mensajeContador);
 
     arrayCartas.forEach(carta => {
         carta.addEventListener('click', () => {
@@ -64,12 +69,14 @@ export const iniciarJuego = () => {
                     lista.appendChild(mensaje); // Se agrega el nuevo par de cartas encontrado a la lista
 
                     parejasFormadas.add(primeraCarta); // Se añade el par de cartas encontrado
+                    contador ++;
+                    mensajeContador.textContent = `Total encontradas: ${contador}`;
 
                     // Si se han encontrado las 15 parejas se entra en este condicional
                     if (parejasFormadas.size === 15) {
                     const finJuego = Date.now();
                     const segundos = Math.floor((finJuego - inicioJuego) / 1000);
-                    alert(`¡Ganaste! Tiempo: ${segundos} segundos`);
+                    alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
                     }
 
                     primeraCarta = '';
