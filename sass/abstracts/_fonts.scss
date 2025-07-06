@@ -1,0 +1,53 @@
+// Fonts. Fuentes importadas desde Google Fonts
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('ComicNeue-Light.eot');
+    src: url('ComicNeue-Light.eot?#iefix') format('embedded-opentype'),
+        url('ComicNeue-Light.woff2') format('woff2'),
+        url('ComicNeue-Light.woff') format('woff'),
+        url('ComicNeue-Light.ttf') format('truetype'),
+        url('ComicNeue-Light.svg#ComicNeue-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('ComicNeue-Bold.eot');
+    src: url('ComicNeue-Bold.eot?#iefix') format('embedded-opentype'),
+        url('ComicNeue-Bold.woff2') format('woff2'),
+        url('ComicNeue-Bold.woff') format('woff'),
+        url('ComicNeue-Bold.ttf') format('truetype'),
+        url('ComicNeue-Bold.svg#ComicNeue-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('ComicNeue-Regular.eot');
+    src: url('ComicNeue-Regular.eot?#iefix') format('embedded-opentype'),
+        url('ComicNeue-Regular.woff2') format('woff2'),
+        url('ComicNeue-Regular.woff') format('woff'),
+        url('ComicNeue-Regular.ttf') format('truetype'),
+        url('ComicNeue-Regular.svg#ComicNeue-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Coming Soon';
+    src: url('ComingSoon-Regular.eot');
+    src: url('ComingSoon-Regular.eot?#iefix') format('embedded-opentype'),
+        url('ComingSoon-Regular.woff2') format('woff2'),
+        url('ComingSoon-Regular.woff') format('woff'),
+        url('ComingSoon-Regular.ttf') format('truetype'),
+        url('ComingSoon-Regular.svg#ComingSoon-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

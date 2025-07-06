@@ -1,9 +1,11 @@
-@use '../abstracts/variables';
+@use '../abstracts/abstracts' as *;
 
 html * {
-    font-family: variables.$roboto-font;
+    font-family: Arial, Helvetica, sans-serif;
 }
  
 body {
     overflow-x: hidden;
+    font-size: 16px;
+    padding: 16px 32px;
 } 
