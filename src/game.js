@@ -1,6 +1,6 @@
 // game.js
 
-import { generarColoresUnicos } from './utils.js';
+import { generarColoresUnicos, insertarBoton } from './utils.js';
 import { colorearCarta, obtenerCartas } from './dom.js';
 
 export const iniciarJuego = () => {
@@ -74,9 +74,9 @@ export const iniciarJuego = () => {
 
                     // Si se han encontrado las 15 parejas se entra en este condicional
                     if (parejasFormadas.size === 15) {
-                    const finJuego = Date.now();
-                    const segundos = Math.floor((finJuego - inicioJuego) / 1000);
-                    alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
+                        const finJuego = Date.now();
+                        const segundos = Math.floor((finJuego - inicioJuego) / 1000);
+                        alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
                     }
 
                     primeraCarta = '';
@@ -98,7 +98,7 @@ export const iniciarJuego = () => {
                     });
                     primeraCarta = '';
                     segundaCarta = '';
-                    }, 1000);
+                    }, 500);
                 }
             }
         });
