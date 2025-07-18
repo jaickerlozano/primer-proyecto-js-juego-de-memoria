@@ -11,3 +11,4 @@ export const generarColoresUnicos = (cantidad) => {
     }
     return [...colores];
 };
+

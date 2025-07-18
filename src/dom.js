@@ -7,3 +7,4 @@ export const colorearCarta = (carta, color) => {
 export const obtenerCartas = () => {
     return document.querySelectorAll('.cartas');
 };
+

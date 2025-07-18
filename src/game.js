@@ -1,106 +1,135 @@
 // game.js
 
-import { generarColoresUnicos, insertarBoton } from './utils.js';
+import { generarColoresUnicos } from './utils.js';
 import { colorearCarta, obtenerCartas } from './dom.js';
 
+let cartas = [];
+let cartaClickHandler; // función para manejar clics, la guardamos para poder removerla
+
 export const iniciarJuego = () => {
-    const cartas = obtenerCartas();
+    cartas = obtenerCartas(); // guardamos cartas globalmente
     const arrayCartas = [...cartas];
     const colorPorDefecto = 'rgb(51, 51, 51)';
+    const colores = generarColoresUnicos(15);
 
     let primerPar = new Set();
     let segundoPar = new Set();
     let parejasFormadas = new Set();
-    const colores = generarColoresUnicos(15);
     let contador = 0;
-
-    // Asignar clases y colores por par
-    cartas.forEach(carta => {
-        let par;
-        let color;
-        if (primerPar.size < 15) {
-        do { par = Math.floor(Math.random() * 15 + 1); } while (primerPar.has(par));
-            primerPar.add(par);
-            // color = colores[par - 1]; // no es necesario de momento
-        } else {
-            do { par = Math.floor(Math.random() * 15 + 1); } while (segundoPar.has(par));
-            segundoPar.add(par);
-            // color = colores[par - 1]; // no es necesario de momento
-        }
-        carta.classList.add(`par${par}`);
-        colorearCarta(carta, colorPorDefecto);
-    });
-
     let primeraCarta = '';
     let segundaCarta = '';
     let inicioJuego = Date.now();
 
-    const lista = document.createElement('ul'); // Se crea una lista donde se añadirán las cartas encontradas
+    const lista = document.createElement('ul');
     lista.textContent = 'Parejas encontradas:';
-    document.getElementsByClassName('container')[0].after(lista);
+    document.querySelector('.container').after(lista);
 
     const mensajeContador = document.createElement('p');
     mensajeContador.classList.add('contador');
     lista.before(mensajeContador);
 
-    arrayCartas.forEach(carta => {
-        carta.addEventListener('click', () => {
-            if (carta.classList.contains('turnedCard')) return;
+    // Asignar clases y colores
+    cartas.forEach(carta => {
+        let par;
+        if (primerPar.size < 15) {
+            do { par = Math.floor(Math.random() * 15 + 1); } while (primerPar.has(par));
+            primerPar.add(par);
+        } else {
+            do { par = Math.floor(Math.random() * 15 + 1); } while (segundoPar.has(par));
+            segundoPar.add(par);
+        }
+        carta.classList.add(`par${par}`);
+        colorearCarta(carta, colorPorDefecto);
+    });
 
-            const clasePar = [...carta.classList].find(cl => cl.startsWith('par'));
-            const parIndex = parseInt(clasePar.replace('par', '')) - 1;
-            const color = colores[parIndex];
+    // Función manejadora del clic (guardada para poder quitarla después)
+    cartaClickHandler = function () {
+        if (this.classList.contains('turnedCard')) return;
 
-            colorearCarta(carta, color); // Colorea la carta
-            carta.textContent = `${parIndex + 1}`; // Identifica la carta con su número en el DOM
-            carta.classList.add('turnedCard');  // Añade la clase turnedCard
+        const clasePar = [...this.classList].find(clase => clase.startsWith('par'));
+        const parIndex = parseInt(clasePar.replace('par', '')) - 1;
+        const color = colores[parIndex];
 
-            // Se evalua si ña carta está vacía o no para agregar la clase
-            if (!primeraCarta) {
-                primeraCarta = clasePar;
+        colorearCarta(this, color);
+        this.textContent = `${parIndex + 1}`;
+        this.classList.add('turnedCard');
+
+        if (!primeraCarta) {
+            primeraCarta = clasePar;
+        } else {
+            segundaCarta = clasePar;
+
+            if (primeraCarta === segundaCarta) {
+                const mensaje = document.createElement('li');
+                mensaje.classList.add('mensaje');
+                mensaje.textContent = `Has encontrado el par de cartas ${primeraCarta.replace('par', '')}`;
+                lista.appendChild(mensaje);
+
+                parejasFormadas.add(primeraCarta);
+                contador++;
+                mensajeContador.textContent = `Total encontradas: ${contador}`;
+
+                if (parejasFormadas.size === 15) {
+                    const finJuego = Date.now();
+                    const segundos = Math.floor((finJuego - inicioJuego) / 1000);
+                    alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
+                }
+
+                primeraCarta = '';
+                segundaCarta = '';
             } else {
-                segundaCarta = clasePar;
-
-                // Si los dos pares de cartas son iguales se entra en este condicional
-                if (primeraCarta === segundaCarta) {
-                    const mensaje = document.createElement('li');
-                    mensaje.classList.add('mensaje');
-                    mensaje.textContent = `Has encontrado el par de cartas ${primeraCarta.replace('par', '')}`;
-                    lista.appendChild(mensaje); // Se agrega el nuevo par de cartas encontrado a la lista
-
-                    parejasFormadas.add(primeraCarta); // Se añade el par de cartas encontrado
-                    contador ++;
-                    mensajeContador.textContent = `Total encontradas: ${contador}`;
-
-                    // Si se han encontrado las 15 parejas se entra en este condicional
-                    if (parejasFormadas.size === 15) {
-                        const finJuego = Date.now();
-                        const segundos = Math.floor((finJuego - inicioJuego) / 1000);
-                        alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
-                    }
-
-                    primeraCarta = '';
-                    segundaCarta = '';
-
-                    // Si las dos cartas son diferentes se entra en esta condición 
-                } else {
-                    // Se 
-                    setTimeout(() => {
-                        arrayCartas.forEach(c => {
-                            if (
-                                (c.classList.contains(primeraCarta) || c.classList.contains(segundaCarta)) &&
-                                !parejasFormadas.has(c.classList[1])
-                            ) {
-                                colorearCarta(c, colorPorDefecto);
-                                c.textContent = '';
-                                c.classList.remove('turnedCard');
-                            }
+                setTimeout(() => {
+                    arrayCartas.forEach(c => {
+                        if (
+                            (c.classList.contains(primeraCarta) || c.classList.contains(segundaCarta)) &&
+                            !parejasFormadas.has(c.classList[1])
+                        ) {
+                            colorearCarta(c, colorPorDefecto);
+                            c.textContent = '';
+                            c.classList.remove('turnedCard');
+                        }
                     });
                     primeraCarta = '';
                     segundaCarta = '';
-                    }, 500);
-                }
+                }, 500);
             }
-        });
-    });
+        }
+    };
 };
+
+// Activar eventos
+export function activarEventosCartas() {
+    cartas.forEach(carta => {
+        carta.addEventListener('click', cartaClickHandler);
+    });
+}
+
+// Desactivar eventos
+export function desactivarEventosCartas() {
+    cartas.forEach(carta => {
+        carta.removeEventListener('click', cartaClickHandler);
+    });
+}
+
+// Reiniciar juego
+export function reiniciarJuego() {
+    // Eliminar cartas del DOM
+    const contenedor = document.querySelector('.container');
+    contenedor.innerHTML = ''; // Limpia todo dentro del contenedor
+
+    // Eliminar mensajes y contador
+    const lista = document.querySelector('ul');
+    const contador = document.querySelector('.contador');
+    if (lista) lista.remove();
+    if (contador) contador.remove();
+
+    // Volver a crear las cartas
+    for (let i = 0; i < 30; i++) {
+        const carta = document.createElement('div');
+        carta.classList.add('cartas');
+        contenedor.appendChild(carta);
+    }
+
+    // Iniciar nuevamente el juego con las nuevas cartas
+    iniciarJuego();
+}
