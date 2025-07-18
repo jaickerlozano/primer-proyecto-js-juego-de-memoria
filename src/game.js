@@ -3,6 +3,8 @@
 import { generarColoresUnicos } from './utils.js';
 import { colorearCarta, obtenerCartas } from './dom.js';
 import { startStop } from './timer.js';
+import { estaBloqueado, activarBloqueo, desactivarBloqueo } from './turn-manager.js';
+
 
 let cartas = [];
 let cartaClickHandler; // función para manejar clics, la guardamos para poder removerla
@@ -45,7 +47,7 @@ export const iniciarJuego = () => {
 
     // Función manejadora del clic (guardada para poder quitarla después)
     cartaClickHandler = function () {
-        if (this.classList.contains('turnedCard')) return;
+        if (this.classList.contains('turnedCard') || estaBloqueado()) return;
 
         const clasePar = [...this.classList].find(clase => clase.startsWith('par'));
         const parIndex = parseInt(clasePar.replace('par', '')) - 1;
@@ -59,6 +61,7 @@ export const iniciarJuego = () => {
             primeraCarta = clasePar;
         } else {
             segundaCarta = clasePar;
+            activarBloqueo(); // 🔒 se activa el bloqueo de eventos
 
             if (primeraCarta === segundaCarta) {
                 const mensaje = document.createElement('li');
@@ -79,6 +82,7 @@ export const iniciarJuego = () => {
 
                 primeraCarta = '';
                 segundaCarta = '';
+                desactivarBloqueo(); // 🔓 se desactiva el bloqueo de eventos
             } else {
                 setTimeout(() => {
                     arrayCartas.forEach(c => {
@@ -93,6 +97,7 @@ export const iniciarJuego = () => {
                     });
                     primeraCarta = '';
                     segundaCarta = '';
+                    desactivarBloqueo(); // 🔓 se desactiva el bloqueo de eventos
                 }, 500);
             }
         }
