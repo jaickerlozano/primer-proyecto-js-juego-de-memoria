@@ -2,6 +2,7 @@
 
 import { generarColoresUnicos } from './utils.js';
 import { colorearCarta, obtenerCartas } from './dom.js';
+import { startStop } from './timer.js';
 
 let cartas = [];
 let cartaClickHandler; // función para manejar clics, la guardamos para poder removerla
@@ -70,6 +71,7 @@ export const iniciarJuego = () => {
                 mensajeContador.textContent = `Total encontradas: ${contador}`;
 
                 if (parejasFormadas.size === 15) {
+                    startStop();
                     const finJuego = Date.now();
                     const segundos = Math.floor((finJuego - inicioJuego) / 1000);
                     alert(`🎉¡Ganaste! Tiempo: ${segundos} segundos`);
